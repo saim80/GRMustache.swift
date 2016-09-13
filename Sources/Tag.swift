@@ -147,5 +147,5 @@ public protocol Tag: class, CustomStringConvertible {
     - returns: The rendering of the tag.
     
     */
-    func render(context: Context) throws -> Rendering
+    func render(_ context: Context) throws -> Rendering
 }

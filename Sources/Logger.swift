@@ -93,10 +93,10 @@ extension StandardLibrary {
         }
         
         var indentationPrefix: String {
-            return String(count: indentationLevel * 2, repeatedValue: " " as Character)
+            return String(repeating: " ", count: indentationLevel * 2)
         }
         
-        private let log: (String) -> Void
-        private var indentationLevel: Int = 0
+        fileprivate let log: (String) -> Void
+        fileprivate var indentationLevel: Int = 0
     }
 }

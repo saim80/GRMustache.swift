@@ -20,9 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
-import Foundation
-
 let ZipFilter = VariadicFilter { (boxes) in
     
     // Turn collection arguments into generators. Generators can be iterated
@@ -30,14 +27,14 @@ let ZipFilter = VariadicFilter { (boxes) in
     //
     // Other kinds of arguments generate an error.
     
-    var zippedGenerators: [AnyGenerator<MustacheBox>] = []
+    var zippedGenerators: [AnyIterator<MustacheBox>] = []
     
     for box in boxes {
         if box.isEmpty {
             // Missing collection does not provide anything
         } else if let array = box.arrayValue {
             // Array
-            zippedGenerators.append(AnyGenerator(array.generate()))
+            zippedGenerators.append(AnyIterator(array.makeIterator()))
         } else {
             // Error
             throw MustacheError(kind: .RenderError, message: "Non-enumerable argument in zip filter: `\(box.value)`")
@@ -59,7 +56,7 @@ let ZipFilter = VariadicFilter { (boxes) in
         
         var zippedBoxes: [MustacheBox] = []
         for generator in zippedGenerators {
-            var generator = generator
+            var iterator = generator
             if let box = generator.next() {
                 zippedBoxes.append(box)
             }
@@ -87,5 +84,5 @@ let ZipFilter = VariadicFilter { (boxes) in
     
     // Return a box of those boxed render functions
     
-    return Box(renderFunctions.map(Box))
+    return Box(boxable: renderFunctions.map(Box))
 }

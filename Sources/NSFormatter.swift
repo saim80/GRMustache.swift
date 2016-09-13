@@ -28,7 +28,7 @@ import Foundation
 GRMustache lets you use `NSFormatter` to format your values.
 */
 
-extension NSFormatter {
+extension Formatter {
     
     /**
     `NSFormatter` adopts the `MustacheBoxable` protocol so that it can feed
@@ -85,7 +85,7 @@ extension NSFormatter {
     dates: you can safely mix various data types in a section controlled by
     those well-behaved formatters.
     */
-    public override var mustacheBox: MustacheBox {
+    public var mustacheBox: MustacheBox {
         // Return a multi-facetted box, because NSFormatter interacts in
         // various ways with Mustache rendering.
         
@@ -102,7 +102,7 @@ extension NSFormatter {
                 // > right class, return a properly formatted and, if necessary,
                 // > localized string.
                 if let object = box.value as? NSObject {
-                    return Box(self.stringForObjectValue(object))
+                    return Box(self.string(for: object))
                 } else {
                     // Not the correct class: return nil, i.e. empty Box.
                     return Box()
@@ -129,7 +129,7 @@ extension NSFormatter {
                     // So nil result means that object is not of the correct class. Leave
                     // it untouched.
                     
-                    if let object = box.value as? NSObject, let formatted = self.stringForObjectValue(object) {
+                    if let object = box.value as? NSObject, let formatted = self.string(for: object) {
                         return Box(formatted)
                     } else {
                         return box
